@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block EXTJS %}
+    <script type="text/javascript" src="{% static 'app/order/js/order.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div id="order_info" class="container">
+    <!--订单编号-->
+    <h3>订单编号:{{ order_id }}</h3>
+    <a href={% url "shop:home" %}>
+        <input type="button" value="返回首页">
+    </a>
+    <a href={% url "shop:mine" %}>
+        <input type="button" value="返回我的">
+    </a>
+    <!--处理结束-->
+    <ul>
+        <!--所有订单信息展示-->
+            {% for good in total_goods_to_order %}
+            <li>
+                <!--商品名称展示-->
+                <img src={{ good.0 }}>{{ good.1}}
+
+                <span> <!-- 数量展示 -->{{ good.2 }}</span>
+            </li>
+            {% endfor %}
+        <!--订单处理结束-->
+    </ul>
+        <!--订单id展示-->
+        <button id="alipay"><a href="{% url 'shop:orderpay' order_id%}">Alipay</a></button>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block EXTJS %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'app/common/common.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <h3>待收货订单列表</h3>
+    <a href={% url "shop:home" %}>
+        <input type="button" value="返回首页">
+    </a>
+    <a href={% url "shop:mine" %}>
+        <input type="button" value="返回我的">
+    </a>
+    <ul>
+        {% csrf_token %}
+        {% for order_id,goods in total_orders_goods.items %}
+            <div id="div_{{ order_id }}">
+            <div style="height: 4px; width: 100%;border: 1px solid #000000"></div>
+        <!--订单展示-->
+            <li>
+                <a href="#">
+                    <p><!-- 订单id -->{{ order_id }}</p>
+                    {% for good in goods %}
+                    <p><!-- 数量 -->{{ good.2 }}</p>
+                        <!--展示商品的名称-->
+                        <li>
+                            <img src="{{ good.0 }}" alt="">{{good.1}}
+                        </li>
+                        <!--处理结束-->
+                     {% endfor %}
+                </a>
+                <button onclick="delRecord({{ order_id }})">删除记录</button>
+            </li>
+            </div>
+        <!--订单处理结束-->
+        {% endfor %}
+
+    </ul>
+    <script>
+        function delRecord(del_id) {
+            alert("delcord");
+            csrf = $('input[name="csrfmiddlewaretoken"]').val();
+            $.ajax({
+                url:'/shopapp/deleterecord/',
+                type:'POST',
+                data:{"del_id":del_id},
+                dataType:'json',
+                headers:{"X-CSRFToken":csrf},
+                success:function(){
+                    $("#div_"+ del_id).empty();
+                },
+                error:function (){
+                    alert("删除错误")
+                }
+            });
+        }
+    </script>
+
+{% endblock %}

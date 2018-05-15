@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <h3>待付款订单列表</h3>
+    <a href={% url "shop:home" %}>
+        <input type="button" value="返回首页">
+    </a>
+    <a href={% url "shop:mine" %}>
+        <input type="button" value="返回我的">
+    </a>
+    <ul>
+        <!--订单信息展示-->
+        {% for order_id,goods in total_orders_goods.items %}
+            <div style="height: 4px; width: 100%;border: 1px solid #000000"></div>
+            <li>
+                    <p><!-- 订单id -->{{ order_id }}</p>
+                    {% for good in goods %}
+                    <p><!-- 数量 -->{{ good.2 }}</p>
+                        <!--展示商品的名称-->
+                        <li>
+                            <img src="{{ good.0 }}" alt=""> {{good.1}}
+                        </li>
+                        <!--处理结束-->
+                    {% endfor %}
+                </a>
+            </li>
+            <a href="{% url "shop:orderpay" order_id %}">
+                <input type="button" value="Alipay">
+            </a>
+        <!--订单处理结束-->
+        {% endfor %}
+
+    </ul>
+
+
+{% endblock %}
